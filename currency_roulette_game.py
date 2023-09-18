@@ -1,20 +1,16 @@
 import random
 import os
-import requests
-
+from currency_converter import CurrencyConverter
 
 
 def get_money_interval(difficulty):
     # Will get the Current currency
-    # and generate an int : difficulty = d, money = t [(t - (5 - d), t + (5 - d))]
-    # API key from "free.currencyconverterapi.com": 2e015e19466c486dc19f
-    url = "https://free.currconv.com/api/v7/convert?q=USD_ILS&compact=ultra&apiKey=0163128afebbf1c47d33"
-    response = requests.get(url, verify=False)
-    data = response.json()
     # ex: exchange rate USD ILS
     # usd: Random numbers of USD
     # t: The Value of ILS in USD currency
-    ex = int(data["USD_ILS"])
+    ex = CurrencyConverter()
+    ex = ex.convert(1, 'USD', 'ILS')
+    # ex = int(data["USD_ILS"])
     usd = int(random.uniform(1, 100))
     result = usd * ex
     low = int(result - (10 - difficulty))
