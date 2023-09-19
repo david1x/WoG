@@ -1,6 +1,6 @@
 Application logic
-    What happens if the user enters text instead of a number for game or difficulty selection? This triggers an error. There are ways to validate this without risking an error.
-    Does the game conclude after a single playthrough? Perhaps inquire whether the user wishes to play again.
-    The functions "start_play" and "welcome" should not return nothing.
-Games
+    What happens if the user enters text instead of a number for game or difficulty selection? This triggers an error. There are ways to validate this without risking an error. - Done
+    Does the game conclude after a single playthrough? Perhaps inquire whether the user wishes to play again. - Done
+    The functions "start_play" and "welcome" should not return nothing. - Done
+Games 
     In the currency conversion game, I recommend avoiding the use of APIs; there are libraries available for this purpose. - Done
