@@ -8,7 +8,7 @@ def add_score(difficultly):
     try:
         score_file = open(Path("Scores.txt"), "r")
         score = open(Path("Scores.txt"), "a")
-        score.write(f" ,{POINTS_OF_WINNING}")
+        score.write(f", {POINTS_OF_WINNING}")
     except FileNotFoundError:
         score = open(Path("Scores.txt"), "x")
         score.write(POINTS_OF_WINNING)
