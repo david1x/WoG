@@ -2,6 +2,7 @@ import guess_game
 import memory_game
 import currency_roulette_game
 import os
+from score import add_score
 global difficultly, choice
 
 
@@ -31,12 +32,18 @@ def start_play():
         if int(choice) == 1:
             # Calling Game number Two (Memory game)
             memory_game.play(difficultly)
+            if bool(memory_game) is True:
+                add_score(difficultly=difficultly)
         if int(choice) == 2:
             # Calling Game number one (Guess game)
             guess_game.play(difficultly)
+            if bool(guess_game) is True:
+                add_score(difficultly=difficultly)
         if int(choice) == 3:
             # Calling Game number Two (CurrencyRoulette Game)
             currency_roulette_game.play(difficultly)
+            if bool(currency_roulette_game) is True:
+                add_score(difficultly=difficultly)
         play_again()
 
 def play_again():
