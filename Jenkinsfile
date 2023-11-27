@@ -6,7 +6,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image using docker-compose
-                    sh 'docker-compose up --build -d'
+                    sh 'sudo docker-compose up --build -d'
                 }
             }
         }
@@ -15,7 +15,16 @@ pipeline {
             steps {
                 script {
                     // Execute your tests inside the running Docker container
-                    sh 'python tests/e2e.py'
+                    sh 'python3 tests/e2e.py'
+                }
+            }
+        }
+
+        stage('Install Requirements') {
+            steps {
+                script {
+                    // Execute your tests inside the running Docker container
+                    sh 'sudo pip3 install -r requirements.txt'
                 }
             }
         }
@@ -25,7 +34,7 @@ pipeline {
         always {
             // Cleanup steps, e.g., stopping and removing the Docker container
             script {
-                sh 'docker-compose down'
+                sh 'sudo docker-compose down'
             }
         }
     }
