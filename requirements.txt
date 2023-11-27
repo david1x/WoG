@@ -1,0 +1,5 @@
+flask==2.3.3
+selenium==4.11.2
+
+# Run flask app 
+# flask --app MainScores.py run
