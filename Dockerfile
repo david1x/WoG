@@ -28,7 +28,7 @@ WORKDIR /app
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
-RUN --mount=type=cache,target=/root/.cache/pip
+# RUN --mount=type=cache,target=/root/.cache/pip
 
 
 # Copy the source code into the container.
