@@ -2,13 +2,20 @@ pipeline {
     agent { label 'docker' }
 
     environment {
-        DOCKER_IMAGE = 'damar12/wog:latest'
         DOCKER_COMPOSE_FILE = 'docker-compose.yml'
         CONTAINER_NAME = 'my_container'
-        APP_ENDPOINT = 'http://localhost:5000'  // Adjust the endpoint as per your Flask app configuration
     }
 
     stages {
+        stage('Clone Git Repository') {
+            steps {
+                script {
+                    // Clone the Git repository
+                    sh 'git clone https://github.com/david1x/WoG.git'
+                }
+            }
+        }
+
         stage('Check and Install pip on Node') {
             steps {
                 script {
@@ -21,7 +28,7 @@ pipeline {
                     }
 
                     // Install requirements.txt on the Jenkins agent node
-                    sh 'sudo pip3 install -r requirements.txt'
+                    sh 'sudo pip3 install -r WoG/requirements.txt'
                 }
             }
         }
@@ -30,24 +37,16 @@ pipeline {
             steps {
                 script {
                     // Provide permissions to chromedriver
-                    sh 'chmod +x tests/chromedriver'
+                    sh 'chmod +x WoG/tests/chromedriver'
                 }
             }
         }
 
-        // stage('Pull Docker Image') {
-        //     steps {
-        //         script {
-        //             // Pull the Docker image from Docker Hub
-        //             sh "sudo docker pull $DOCKER_IMAGE"
-        //         }
-        //     }
-        // }
         stage('Build Docker Image') {
             steps {
                 script {
                     // Build the Docker image using docker-compose
-                    sh "sudo docker-compose -f $DOCKER_COMPOSE_FILE build"
+                    sh "sudo docker-compose -f WoG/$DOCKER_COMPOSE_FILE build"
                 }
             }
         }
@@ -56,7 +55,7 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container
-                    sh "sudo docker-compose -f $DOCKER_COMPOSE_FILE up -d"
+                    sh "sudo docker-compose -f WoG/$DOCKER_COMPOSE_FILE up -d"
                 }
             }
         }
@@ -70,7 +69,7 @@ pipeline {
                     def retries = 0
 
                     while (retries < maxRetries) {
-                        def responseCode = sh(script: "curl -s -o /dev/null -w '%{http_code}' $APP_ENDPOINT", returnStatus: true)
+                        def responseCode = sh(script: "curl -s -o /dev/null -w '%{http_code}' http://localhost:5000", returnStatus: true)
 
                         if (responseCode == 200) {
                             echo "Flask app is up and running!"
@@ -93,7 +92,7 @@ pipeline {
             steps {
                 script {
                     // Execute your E2E tests outside the Docker container
-                    sh "python3 tests/e2e.py"
+                    sh "python3 WoG/tests/e2e.py"
                 }
             }
         }
@@ -103,7 +102,7 @@ pipeline {
         always {
             // Cleanup steps, e.g., stopping and removing the Docker container
             script {
-                sh "sudo docker stop $CONTAINER_NAME && sudo docker rm $CONTAINER_NAME"
+                sh "sudo docker-compose -f WoG/$DOCKER_COMPOSE_FILE down"
             }
         }
     }
