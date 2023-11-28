@@ -11,13 +11,10 @@ pipeline {
             steps {
                 script {
                     def repoDir = 'WoG'
-        
-                    // Check if the repository directory already exists
                     def repoExists = fileExists(repoDir)
-        
+
                     if (!repoExists) {
                         echo "Cloning the Git repository..."
-                        // Clone the Git repository
                         sh 'git clone https://github.com/david1x/WoG.git'
                     } else {
                         echo "Repository already exists. Skipping clone."
@@ -31,7 +28,6 @@ pipeline {
                 script {
                     // List contents of the working directory to verify the repository structure
                     sh 'ls -la'
-                    sh 'pwd'
                 }
             }
         }
@@ -68,7 +64,7 @@ pipeline {
                     dir('WoG') {
                         // Change to the repository directory
                         // Build the Docker image using docker-compose
-                        sh "sudo docker-compose -f docker-compose.yaml build"
+                        sh "sudo docker-compose -f docker-compose.yml build"
                     }
                 }
             }
@@ -77,8 +73,11 @@ pipeline {
         stage('Run Docker Container') {
             steps {
                 script {
-                    // Run the Docker container
-                    sh "sudo docker-compose -f WoG/$DOCKER_COMPOSE_FILE up -d"
+                    dir('WoG') {
+                        // Change to the repository directory
+                        // Run the Docker container
+                        sh "sudo docker-compose -f docker-compose.yaml up -d"
+                    }
                 }
             }
         }
