@@ -16,6 +16,15 @@ pipeline {
             }
         }
 
+        stage('List Repository Contents') {
+            steps {
+                script {
+                    // List contents of the working directory to verify the repository structure
+                    sh 'ls -la'
+                }
+            }
+        }
+
         stage('Check and Install pip on Node') {
             steps {
                 script {
