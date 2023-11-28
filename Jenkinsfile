@@ -6,6 +6,15 @@ pipeline {
     }
 
     stages {
+        stage('Install Requirements on Node') {
+            steps {
+                script {
+                    // Install requirements.txt on the Jenkins agent node
+                    sh 'sudo pip3 install -r requirements.txt'
+                }
+            }
+        }
+
         stage('Pull Docker Image') {
             steps {
                 script {
@@ -24,11 +33,11 @@ pipeline {
             }
         }
 
-        stage('Install Requirements') {
+        stage('Install Requirements in Docker Image') {
             steps {
                 script {
                     // Execute your tests inside the pulled Docker image
-                    sh 'sudo pip3 install -r requirements.txt'
+                    sh "sudo docker run --rm $DOCKER_IMAGE pip install -r requirements.txt"
                 }
             }
         }
