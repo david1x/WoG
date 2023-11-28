@@ -10,8 +10,18 @@ pipeline {
         stage('Clone Git Repository') {
             steps {
                 script {
-                    // Clone the Git repository
-                    sh 'git clone https://github.com/david1x/WoG.git'
+                    def repoDir = 'WoG'
+        
+                    // Check if the repository directory already exists
+                    def repoExists = fileExists(repoDir)
+        
+                    if (!repoExists) {
+                        echo "Cloning the Git repository..."
+                        // Clone the Git repository
+                        sh 'git clone https://github.com/david1x/WoG.git'
+                    } else {
+                        echo "Repository already exists. Skipping clone."
+                    }
                 }
             }
         }
