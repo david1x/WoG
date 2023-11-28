@@ -6,9 +6,17 @@ pipeline {
     }
 
     stages {
-        stage('Install Requirements on Node') {
+        stage('Check and Install pip on Node') {
             steps {
                 script {
+                    // Check if pip is installed
+                    def pipInstalled = sh(script: 'command -v pip', returnStatus: true) == 0
+
+                    // Install pip if not already installed
+                    if (!pipInstalled) {
+                        sh 'sudo apt-get update && sudo apt-get install -y python3-pip'
+                    }
+
                     // Install requirements.txt on the Jenkins agent node
                     sh 'sudo pip3 install -r requirements.txt'
                 }
