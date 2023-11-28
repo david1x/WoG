@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'damar12/wog:latest'
+        DOCKER_COMPOSE_FILE = 'docker-compose.yml'
         CONTAINER_NAME = 'my_container'
         APP_ENDPOINT = 'http://localhost:5000'  // Adjust the endpoint as per your Flask app configuration
     }
