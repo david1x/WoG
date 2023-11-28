@@ -22,7 +22,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Provide Permissions to chromedriver') {
             steps {
                 script {
@@ -31,7 +31,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Pull Docker Image') {
             steps {
                 script {
@@ -41,20 +41,20 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Docker Container') {
             steps {
                 script {
-                    // Execute your tests inside the pulled Docker image
-                    sh 'sudo docker run --rm $DOCKER_IMAGE python3 tests/e2e.py'
+                    // Run the Docker container
+                    sh "sudo docker run --rm -d --name my_container $DOCKER_IMAGE"
                 }
             }
         }
 
-        stage('Install Requirements in Docker Image') {
+        stage('Run E2E Tests') {
             steps {
                 script {
-                    // Execute your tests inside the pulled Docker image
-                    sh "sudo docker run --rm $DOCKER_IMAGE pip install -r requirements.txt"
+                    // Execute your E2E tests inside the running Docker container
+                    sh "python3 tests/e2e.py"
                 }
             }
         }
@@ -64,7 +64,7 @@ pipeline {
         always {
             // Cleanup steps, e.g., stopping and removing the Docker container
             script {
-                sh "sudo docker-compose down"
+                sh "sudo docker stop my_container && sudo docker rm my_container"
             }
         }
     }
