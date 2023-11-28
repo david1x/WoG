@@ -18,7 +18,6 @@ ENV PYTHONUNBUFFERED=1
 RUN mkdir /app/user-data && chown -R appuser:appuser /app/user-data
 
 # Switch to the appuser and set the working directory
-USER appuser
 WORKDIR /app
 
 # Create a non-privileged user that the app will run under.
@@ -30,9 +29,8 @@ RUN adduser --disabled-password --gecos "" --no-create-home --shell "/sbin/nolog
 # Leverage a cache mount to /root/.cache/pip to speed up subsequent builds.
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
-# RUN --mount=type=cache,target=/root/.cache/pip \
-#     --mount=type=bind,source=requirements.txt,target=requirements.txt \
-#     python -m pip install -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip
+COPY requirements.txt /app/requirements.txt
 
 # Switch to the non-privileged user to run the application.
 USER appuser
