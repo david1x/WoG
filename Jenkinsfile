@@ -114,7 +114,7 @@ pipeline {
             steps {
                 script {
                     // Execute your E2E tests outside the Docker container
-                    sh "python3 WoG/tests/e2e.py"
+                    sh "sudo python3 WoG/tests/e2e.py"
                 }
             }
         }
