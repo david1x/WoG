@@ -55,7 +55,7 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container
-                    sh "sudo docker run --rm -d --name $CONTAINER_NAME -p 5000:5000 $DOCKER_IMAGE"
+                    sh "sudo docker-compose -f $DOCKER_COMPOSE_FILE up -d"
                 }
             }
         }
