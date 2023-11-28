@@ -14,6 +14,11 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
+# Create a writable directory for the user
+RUN mkdir /app/user-data && chown -R appuser:appuser /app/user-data
+
+# Switch to the appuser and set the working directory
+USER appuser
 WORKDIR /app
 
 # Create a non-privileged user that the app will run under.
