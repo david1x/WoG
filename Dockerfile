@@ -14,8 +14,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # the application crashes without emitting any logs due to buffering.
 ENV PYTHONUNBUFFERED=1
 
-# Create a writable directory for the user
-RUN mkdir /app/user-data && chown -R appuser:appuser /app/user-data
+
 
 # Switch to the appuser and set the working directory
 WORKDIR /app
@@ -30,17 +29,18 @@ RUN adduser --disabled-password --gecos "" --no-create-home --shell "/sbin/nolog
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
 RUN --mount=type=cache,target=/root/.cache/pip
-COPY requirements.txt /app/requirements.txt
+
 
 # Switch to the non-privileged user to run the application.
 USER appuser
-
+# Create a writable directory for the user
+RUN sudo mkdir /app/user-data && chown -R appuser:appuser /app/user-data
 # Copy the source code into the container.
 COPY MainScores.py .
 COPY templates ./templates/
 COPY requirements.txt .
 COPY Scores.txt .
-
+COPY requirements.txt /app/requirements.txt
 # Install requirements
 RUN python -m pip install -r /app/requirements.txt
 
