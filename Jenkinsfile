@@ -22,7 +22,16 @@ pipeline {
                 }
             }
         }
-
+        
+        stage('Provide Permissions to chromedriver') {
+            steps {
+                script {
+                    // Provide permissions to chromedriver
+                    sh 'chmod +x tests/chromedriver'
+                }
+            }
+        }
+        
         stage('Pull Docker Image') {
             steps {
                 script {
