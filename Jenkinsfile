@@ -3,6 +3,8 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'damar12/wog:latest'
+        CONTAINER_NAME = 'my_container'
+        APP_ENDPOINT = 'http://localhost:5000'  // Adjust the endpoint as per your Flask app configuration
     }
 
     stages {
@@ -45,7 +47,35 @@ pipeline {
             steps {
                 script {
                     // Run the Docker container
-                    sh "sudo docker run --rm -d --name my_container $DOCKER_IMAGE"
+                    sh "sudo docker run --rm -d --name $CONTAINER_NAME -p 5000:5000 $DOCKER_IMAGE"
+                }
+            }
+        }
+
+        stage('Wait for Flask App to Start') {
+            steps {
+                script {
+                    // Wait for the Flask app to respond before proceeding
+                    def maxRetries = 30
+                    def retryInterval = 10
+                    def retries = 0
+
+                    while (retries < maxRetries) {
+                        def responseCode = sh(script: "curl -s -o /dev/null -w '%{http_code}' $APP_ENDPOINT", returnStatus: true)
+
+                        if (responseCode == 200) {
+                            echo "Flask app is up and running!"
+                            break
+                        } else {
+                            echo "Retrying in $retryInterval seconds..."
+                            sleep(retryInterval)
+                            retries++
+                        }
+                    }
+
+                    if (retries == maxRetries) {
+                        error "Failed to wait for Flask app to start."
+                    }
                 }
             }
         }
@@ -53,7 +83,7 @@ pipeline {
         stage('Run E2E Tests') {
             steps {
                 script {
-                    // Execute your E2E tests inside the running Docker container
+                    // Execute your E2E tests outside the Docker container
                     sh "python3 tests/e2e.py"
                 }
             }
@@ -64,7 +94,7 @@ pipeline {
         always {
             // Cleanup steps, e.g., stopping and removing the Docker container
             script {
-                sh "sudo docker stop my_container && sudo docker rm my_container"
+                sh "sudo docker stop $CONTAINER_NAME && sudo docker rm $CONTAINER_NAME"
             }
         }
     }
