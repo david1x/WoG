@@ -64,8 +64,11 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image using docker-compose
-                    sh "sudo docker-compose -f WoG/$DOCKER_COMPOSE_FILE build"
+                    dir('WoG') {
+                        // Change to the repository directory
+                        // Build the Docker image using docker-compose
+                        sh "sudo docker-compose -f docker-compose.yml build"
+                    }
                 }
             }
         }
