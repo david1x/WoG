@@ -34,11 +34,19 @@ pipeline {
             }
         }
 
-        stage('Pull Docker Image') {
+        // stage('Pull Docker Image') {
+        //     steps {
+        //         script {
+        //             // Pull the Docker image from Docker Hub
+        //             sh "sudo docker pull $DOCKER_IMAGE"
+        //         }
+        //     }
+        // }
+        stage('Build Docker Image') {
             steps {
                 script {
-                    // Pull the Docker image from Docker Hub
-                    sh "sudo docker pull $DOCKER_IMAGE"
+                    // Build the Docker image using docker-compose
+                    sh "sudo docker-compose -f $DOCKER_COMPOSE_FILE build"
                 }
             }
         }
