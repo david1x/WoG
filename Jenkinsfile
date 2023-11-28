@@ -1,12 +1,16 @@
 pipeline {
     agent { label 'docker' }
 
+    environment {
+        DOCKER_IMAGE = 'damar12/wog:latest'
+    }
+
     stages {
-        stage('Build and Run Docker Image') {
+        stage('Pull Docker Image') {
             steps {
                 script {
-                    // Build the Docker image using docker-compose
-                    sh 'sudo docker-compose up --build -d'
+                    // Pull the Docker image from Docker Hub
+                    sh "sudo docker pull $DOCKER_IMAGE"
                 }
             }
         }
@@ -14,7 +18,7 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Execute your tests inside the running Docker container
+                    // Execute your tests inside the pulled Docker image
                     sh 'python3 tests/e2e.py'
                 }
             }
@@ -23,7 +27,7 @@ pipeline {
         stage('Install Requirements') {
             steps {
                 script {
-                    // Execute your tests inside the running Docker container
+                    // Execute your tests inside the pulled Docker image
                     sh 'sudo pip3 install -r requirements.txt'
                 }
             }
@@ -34,7 +38,7 @@ pipeline {
         always {
             // Cleanup steps, e.g., stopping and removing the Docker container
             script {
-                sh 'sudo docker-compose down'
+                sh "sudo docker-compose down"
             }
         }
     }
