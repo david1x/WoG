@@ -82,33 +82,33 @@ pipeline {
             }
         }
 
-        stage('Wait for Flask App to Start') {
-            steps {
-                script {
-                    // Wait for the Flask app to respond before proceeding
-                    def maxRetries = 30
-                    def retryInterval = 10
-                    def retries = 0
+        // stage('Wait for Flask App to Start') {
+        //     steps {
+        //         script {
+        //             // Wait for the Flask app to respond before proceeding
+        //             def maxRetries = 5
+        //             def retryInterval = 1
+        //             def retries = 0
 
-                    while (retries < maxRetries) {
-                        def responseCode = sh(script: "curl -s -o /dev/null -w '%{http_code}' http://localhost:5000", returnStatus: true)
+        //             while (retries < maxRetries) {
+        //                 def responseCode = sh(script: "curl -s -o /dev/null -w '%{http_code}' http://localhost:5000", returnStatus: true)
 
-                        if (responseCode == 200) {
-                            echo "Flask app is up and running!"
-                            break
-                        } else {
-                            echo "Retrying in $retryInterval seconds..."
-                            sleep(retryInterval)
-                            retries++
-                        }
-                    }
+        //                 if (responseCode == 200) {
+        //                     echo "Flask app is up and running!"
+        //                     break
+        //                 } else {
+        //                     echo "Retrying in $retryInterval seconds..."
+        //                     sleep(retryInterval)
+        //                     retries++
+        //                 }
+        //             }
 
-                    if (retries == maxRetries) {
-                        error "Failed to wait for Flask app to start."
-                    }
-                }
-            }
-        }
+        //             if (retries == maxRetries) {
+        //                 error "Failed to wait for Flask app to start."
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Run E2E Tests') {
             steps {
