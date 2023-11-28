@@ -43,7 +43,7 @@ USER appuser
 COPY MainScores.py .
 COPY templates ./templates/
 COPY requirements.txt .
-# COPY Scores.txt .
+COPY Scores.txt .
 
 # Expose the port that the application listens on.
 EXPOSE 5000
