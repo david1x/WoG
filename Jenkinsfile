@@ -31,6 +31,7 @@ pipeline {
                 script {
                     // List contents of the working directory to verify the repository structure
                     sh 'ls -la'
+                    sh 'pwd'
                 }
             }
         }
