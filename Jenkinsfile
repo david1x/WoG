@@ -53,7 +53,7 @@ pipeline {
             steps {
                 script {
                     // Provide permissions to chromedriver
-                    sh 'chmod +x WoG/tests/chromedriver'
+                    sh 'chmod +x tests/chromedriver'
                 }
             }
         }
@@ -114,7 +114,7 @@ pipeline {
             steps {
                 script {
                     // Change permissions for chromedriver
-                    sh 'sudo chmod +x WoG/tests/chromedriver'
+                    sh 'sudo chmod +x tests/chromedriver'
 
                     // Execute your E2E tests outside the Docker container
                     sh 'sudo python3 WoG/tests/e2e.py'
