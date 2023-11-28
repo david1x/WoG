@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script {
                     // Execute your tests inside the pulled Docker image
-                    sh 'python3 tests/e2e.py'
+                    sh 'sudo docker run --rm $DOCKER_IMAGE python3 tests/e2e.py'
                 }
             }
         }
