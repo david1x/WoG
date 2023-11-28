@@ -64,7 +64,7 @@ pipeline {
                     dir('WoG') {
                         // Change to the repository directory
                         // Build the Docker image using docker-compose
-                        sh "sudo docker-compose -f docker-compose.yml build"
+                        sh "sudo docker-compose -f docker-compose.yaml build"
                     }
                 }
             }
