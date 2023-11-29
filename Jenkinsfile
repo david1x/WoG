@@ -70,11 +70,9 @@ pipeline {
                     sh "sudo docker-compose -f WoG/$DOCKER_COMPOSE_FILE down"
 
                     // Push the Docker image to DockerHub
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKERHUB_USERNAME')]) {
-                        sh "echo $DOCKERHUB_PASSWORD | sudo docker login -u $DOCKERHUB_USERNAME --password-stdin"
-                        sh "sudo docker tag my_image $DOCKERHUB_REPO:latest"
-                        sh "sudo docker push $DOCKERHUB_REPO:latest"
-                    }
+                    sh "sudo docker tag my_image $DOCKERHUB_REPO:latest"
+                    sh "sudo docker push $DOCKERHUB_REPO:latest"
+                
                 }
             }
         }
