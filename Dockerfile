@@ -40,7 +40,7 @@ COPY requirements.txt /app/requirements.txt
 # Install requirements
 RUN python -m pip install -r /app/requirements.txt
 
-# Expose the port that the application listens on.
+# Expose the port that the application listens on
 EXPOSE 8777
 
 # Run the application.
