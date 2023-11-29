@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         DOCKER_COMPOSE_FILE = 'docker-compose.yaml'
-        CONTAINER_NAME = 'my_container'
         DOCKERHUB_REPO = 'damar12/wog'
+        DOCKER_IMAGE_NAME = 'wog:lts'
     }
 
     stages {
@@ -70,7 +70,7 @@ pipeline {
                     sh "sudo docker-compose -f WoG/$DOCKER_COMPOSE_FILE down"
 
                     // Push the Docker image to DockerHub
-                    sh "sudo docker tag my_image $DOCKERHUB_REPO:latest"
+                    sh "sudo docker tag $DOCKER_IMAGE_NAME $DOCKERHUB_REPO:latest"
                     sh "sudo docker push $DOCKERHUB_REPO:latest"
                 
                 }
