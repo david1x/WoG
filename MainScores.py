@@ -14,7 +14,7 @@ def score_server():
         return render_template('error.html', ERROR='Unknown Error')  # Prints error message
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8777)
 
 
 # run in shell 
