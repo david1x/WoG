@@ -1,24 +1,22 @@
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 import platform
 
-options = Options()
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
-options.add_argument('--headless')  # Add this line for headless mode
+chrome_options = Options()
+chrome_options.add_argument('--no-sandbox')  
+chrome_options.add_argument('--headless')  # Add this line for headless mode
+chrome_options.add_argument('--disable-dev-shm-usage')  
 
-# Enable logging
-service_args = ["--verbose"]
 
 system_os = platform.system()
 
 if system_os == 'Windows':
-    service = ChromeService(r"tests/chromedriver.exe", service_args=service_args)
-    driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 else:
-    service = ChromeService(r"tests/chromedriver", service_args=service_args)
-    driver = webdriver.Chrome(service=service, options=options)
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
 def test_scores_service(driver):
     driver.get("http://127.0.0.1:5000/")

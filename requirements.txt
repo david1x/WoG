@@ -1,5 +1,6 @@
 flask==2.3.3
 selenium==4.11.2
+webdriver_manager==4.0.1
 
 # Run flask app 
 # flask --app MainScores.py run
