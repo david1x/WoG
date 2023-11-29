@@ -110,17 +110,17 @@ pipeline {
         //     }
         // }
 
-    //     stage('Run E2E Tests') {
-    //         steps {
-    //             script {
-    //                 // Change permissions for chromedriver
-    //                 sh 'sudo chmod +x tests/chromedriver'
+        stage('Run E2E Tests') {
+            steps {
+                script {
+                    // Change permissions for chromedriver
+                    sh 'sudo chmod +x WoG/tests/chromedriver'
 
-    //                 // Execute your E2E tests outside the Docker container
-    //                 sh 'sudo python3 WoG/tests/e2e.py'
-    //             }
-    //         }
-    //     }
+                    // Execute your E2E tests outside the Docker container
+                    sh 'sudo python3 WoG/tests/e2e.py'
+                }
+            }
+        }
     }
 
     post {
