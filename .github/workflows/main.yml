@@ -1,0 +1,57 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Python and Pip
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+
+      - name: Clone Git Repository
+        run: |
+          repoDir="WoG"
+          if [ -d "$repoDir" ]; then
+            echo "Repository already exists. Removing existing repository and cloning a fresh copy."
+            rm -rf "$repoDir"
+          fi
+          git clone https://github.com/david1x/WoG.git
+
+      - name: Install Python Dependencies
+        run: |
+          sudo pip3 install -r WoG/requirements.txt
+
+      - name: Build Docker Image
+        run: |
+          cd WoG
+          sudo docker-compose -f docker-compose.yaml build
+
+      - name: Run Docker Container
+        run: |
+          cd WoG
+          sudo docker-compose -f docker-compose.yaml up -d
+
+      - name: Run Tests
+        run: |
+          cd WoG
+          sudo chmod +x tests/chromedriver
+          sudo python3 tests/e2e.py
+
+      - name: Finalize
+        run: |
+          cd WoG
+          sudo docker-compose -f docker-compose.yaml down
+
+          # Push the Docker image to DockerHub
+          sudo docker tag wog:lts "${{ secrets.DOCKERHUB_REPO }}:latest"
+          sudo docker push "${{ secrets.DOCKERHUB_REPO }}:latest"
