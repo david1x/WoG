@@ -53,5 +53,5 @@ jobs:
           sudo docker-compose -f docker-compose.yaml down
 
           # Push the Docker image to DockerHub
-          sudo docker tag wog:lts "${{ secrets.DOCKERHUB_REPO }}:latest"
-          sudo docker push "${{ secrets.DOCKERHUB_REPO }}:latest"
+          sudo docker tag wog:lts "${{ secrets.DOCKERHUB_REPO }}:lts"
+          sudo docker push "${{ secrets.DOCKERHUB_REPO }}:lts"
